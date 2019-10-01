@@ -1,0 +1,5 @@
+port: 8080
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:admin@lhamacorp-7ye1u.mongodb.net/myip?retryWrites=true
