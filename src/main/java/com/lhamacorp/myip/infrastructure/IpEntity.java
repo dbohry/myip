@@ -5,14 +5,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "ips")
 public class IpEntity {
 
-    public IpEntity() {
-    }
+    private String name;
+    private String ip;
 
-    public IpEntity(String ip) {
+    public IpEntity(String name, String ip) {
+        this.name = name;
         this.ip = ip;
     }
 
-    private String ip;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getIp() {
         return ip;

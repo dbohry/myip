@@ -26,8 +26,8 @@ public class IpController {
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody String ip) {
-        service.save(ip);
+    public ResponseEntity<String> save(@RequestBody IpEntity entity) {
+        service.save(entity);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

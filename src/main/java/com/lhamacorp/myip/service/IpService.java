@@ -21,8 +21,8 @@ public class IpService {
         return repository.findAll();
     }
 
-    public void save(String ip) {
-        repository.save(new IpEntity(ip));
+    public void save(IpEntity entity) {
+        repository.save(entity);
     }
 
     public void delete() {
