@@ -32,7 +32,7 @@ public class IpController {
 
     @PostMapping
     public ResponseEntity<IpEntity> save(@RequestBody IpEntity entity) {
-        var response = service.save(entity);
+        IpEntity response = service.save(entity);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
