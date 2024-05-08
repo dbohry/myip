@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -24,9 +25,13 @@ func getPublicIP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	http.HandleFunc("/", getPublicIP)
-	fmt.Println("Server is running on port 8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	fmt.Printf("Server is running on port %s", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		fmt.Println("Error:", err)
 	}
 }
