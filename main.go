@@ -25,12 +25,13 @@ type Response struct {
 }
 
 type pageData struct {
-	IP        string
-	Browser   string
-	OS        string
-	UserAgent string
-	Protocol  string
-	Language  string
+	IP       string
+	Hostname string
+	Browser  string
+	OS       string
+	Device   string
+	Protocol string
+	Language string
 }
 
 func clientIP(r *http.Request) string {
@@ -51,18 +52,29 @@ func wantsHTML(r *http.Request) bool {
 	return strings.Contains(r.Header.Get("Accept"), "text/html")
 }
 
+func reverseDNS(ip string) string {
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
+	names, err := net.DefaultResolver.LookupAddr(ctx, ip)
+	if err != nil || len(names) == 0 {
+		return ""
+	}
+	return strings.TrimSuffix(names[0], ".")
+}
+
 func getPublicIP(w http.ResponseWriter, r *http.Request) {
 	ip := clientIP(r)
 
 	if wantsHTML(r) {
 		browser, os := parseUserAgent(r.UserAgent())
 		data := pageData{
-			IP:        ip,
-			Browser:   browser,
-			OS:        os,
-			UserAgent: r.UserAgent(),
-			Protocol:  r.Proto,
-			Language:  r.Header.Get("Accept-Language"),
+			IP:       ip,
+			Hostname: reverseDNS(ip),
+			Browser:  browser,
+			OS:       os,
+			Device:   deviceType(r.UserAgent()),
+			Protocol: r.Proto,
+			Language: r.Header.Get("Accept-Language"),
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if err := pageTemplate.Execute(w, data); err != nil {

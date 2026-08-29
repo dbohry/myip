@@ -1,6 +1,9 @@
 package main
 
-import "regexp"
+import (
+	"regexp"
+	"strings"
+)
 
 var browserPatterns = []struct {
 	name string
@@ -45,4 +48,18 @@ func parseUserAgent(ua string) (browser, os string) {
 	}
 
 	return browser, os
+}
+
+// deviceType classifies a User-Agent as Mobile, Tablet, or Desktop using
+// the same conventions browsers themselves rely on (a bare "Android"
+// token without "Mobile" signals a tablet).
+func deviceType(ua string) string {
+	switch {
+	case strings.Contains(ua, "iPad"), strings.Contains(ua, "Android") && !strings.Contains(ua, "Mobile"):
+		return "Tablet"
+	case strings.Contains(ua, "Mobile"), strings.Contains(ua, "iPhone"), strings.Contains(ua, "Android"):
+		return "Mobile"
+	default:
+		return "Desktop"
+	}
 }
