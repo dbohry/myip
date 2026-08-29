@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"embed"
 	"encoding/json"
+	"html/template"
 	"log"
 	"net"
 	"net/http"
@@ -13,8 +15,22 @@ import (
 	"time"
 )
 
+//go:embed templates/index.html.tmpl
+var templateFS embed.FS
+
+var pageTemplate = template.Must(template.ParseFS(templateFS, "templates/index.html.tmpl"))
+
 type Response struct {
 	IP string `json:"ip"`
+}
+
+type pageData struct {
+	IP        string
+	Browser   string
+	OS        string
+	UserAgent string
+	Protocol  string
+	Language  string
 }
 
 func clientIP(r *http.Request) string {
@@ -31,8 +47,31 @@ func clientIP(r *http.Request) string {
 	return host
 }
 
+func wantsHTML(r *http.Request) bool {
+	return strings.Contains(r.Header.Get("Accept"), "text/html")
+}
+
 func getPublicIP(w http.ResponseWriter, r *http.Request) {
-	response := Response{IP: clientIP(r)}
+	ip := clientIP(r)
+
+	if wantsHTML(r) {
+		browser, os := parseUserAgent(r.UserAgent())
+		data := pageData{
+			IP:        ip,
+			Browser:   browser,
+			OS:        os,
+			UserAgent: r.UserAgent(),
+			Protocol:  r.Proto,
+			Language:  r.Header.Get("Accept-Language"),
+		}
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		if err := pageTemplate.Execute(w, data); err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	response := Response{IP: ip}
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

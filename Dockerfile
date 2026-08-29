@@ -1,7 +1,8 @@
 FROM golang:1.22 AS builder
 WORKDIR /src
 COPY go.mod ./
-COPY main.go ./
+COPY main.go uaparse.go ./
+COPY templates ./templates
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT

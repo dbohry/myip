@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>myip</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    width: 100%;
+    max-width: 560px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  .ip {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+    word-break: break-all;
+    cursor: pointer;
+    margin-bottom: 4px;
+  }
+  .hint {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-bottom: 24px;
+  }
+  dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 8px 16px;
+    margin: 0;
+  }
+  dt { color: var(--muted); }
+  dd { margin: 0; word-break: break-all; }
+  footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  footer code {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 4px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="ip" id="ip" title="click to copy">{{.IP}}</div>
+    <div class="hint" id="copy-hint">click to copy</div>
+    <dl>
+      <dt>Browser</dt><dd>{{.Browser}}</dd>
+      <dt>OS</dt><dd>{{.OS}}</dd>
+      <dt>Protocol</dt><dd>{{.Protocol}}</dd>
+      <dt>Language</dt><dd>{{.Language}}</dd>
+      <dt>User-Agent</dt><dd>{{.UserAgent}}</dd>
+      <dt>Screen</dt><dd id="screen">-</dd>
+      <dt>Timezone</dt><dd id="timezone">-</dd>
+      <dt>Local time</dt><dd id="localtime">-</dd>
+    </dl>
+    <footer>send <code>Accept: application/json</code> for raw JSON</footer>
+  </div>
+  <script>
+    document.getElementById('screen').textContent = screen.width + ' x ' + screen.height;
+    document.getElementById('timezone').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.getElementById('localtime').textContent = new Date().toString();
+
+    document.getElementById('ip').addEventListener('click', function () {
+      var hint = document.getElementById('copy-hint');
+      navigator.clipboard.writeText(this.textContent.trim()).then(function () {
+        var original = hint.textContent;
+        hint.textContent = 'copied!';
+        setTimeout(function () { hint.textContent = original; }, 1200);
+      });
+    });
+  </script>
+</body>
+</html>
