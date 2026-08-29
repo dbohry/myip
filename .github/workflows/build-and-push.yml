@@ -55,3 +55,11 @@ jobs:
           tags: |
             dbohry/myip:latest
             dbohry/myip:${{ github.sha }}
+
+  deploy:
+    name: Deploy
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Portainer Webhook
+        run: curl --location --request POST '${{ secrets.DEPLOY_WEBHOOK }}'
