@@ -38,6 +38,9 @@ type pageData struct {
 }
 
 func clientIP(r *http.Request) string {
+	if cfip := r.Header.Get("CF-Connecting-IP"); cfip != "" {
+		return strings.TrimSpace(cfip)
+	}
 	if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
 		return strings.TrimSpace(strings.Split(xff, ",")[0])
 	}
