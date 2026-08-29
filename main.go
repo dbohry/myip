@@ -18,6 +18,9 @@ import (
 //go:embed templates/index.html.tmpl
 var templateFS embed.FS
 
+//go:embed static/favicon.svg
+var faviconSVG []byte
+
 var pageTemplate = template.Must(template.ParseFS(templateFS, "templates/index.html.tmpl"))
 
 type Response struct {
@@ -62,6 +65,12 @@ func reverseDNS(ip string) string {
 	return strings.TrimSuffix(names[0], ".")
 }
 
+func favicon(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "image/svg+xml")
+	w.Header().Set("Cache-Control", "public, max-age=86400")
+	w.Write(faviconSVG)
+}
+
 func getPublicIP(w http.ResponseWriter, r *http.Request) {
 	ip := clientIP(r)
 
@@ -101,6 +110,8 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", getPublicIP)
+	mux.HandleFunc("/favicon.svg", favicon)
+	mux.HandleFunc("/favicon.ico", favicon)
 
 	server := &http.Server{
 		Addr:         ":" + port,

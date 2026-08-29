@@ -3,6 +3,7 @@ WORKDIR /src
 COPY go.mod ./
 COPY main.go uaparse.go ./
 COPY templates ./templates
+COPY static ./static
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT
