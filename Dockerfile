@@ -1,4 +1,4 @@
-FROM golang:1.22 AS builder
+FROM golang:1.27 AS builder
 WORKDIR /src
 COPY go.mod ./
 COPY main.go uaparse.go ./
