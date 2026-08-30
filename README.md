@@ -16,3 +16,17 @@ This Go program sets up a simple HTTP server that responds with the client's pub
 ```
 PORT=8081 go run main.go
 ```
+
+#### Run with Docker
+```
+docker build -t myip .
+docker run -p 8080:8080 -e PORT=8080 myip
+```
+
+Or pull the published image:
+```
+docker run -p 8080:8080 dbohry/myip:latest
+```
+
+### License
+[MIT](LICENSE)
