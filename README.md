@@ -1,4 +1,8 @@
 # MyIP
+[![CI](https://github.com/dbohry/myip/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/dbohry/myip/actions/workflows/build-and-push.yml)
+[![Docker Image](https://img.shields.io/badge/docker-dbohry/myip-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/dbohry/myip)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 This Go program sets up a simple HTTP server that responds with the client's public IP address in JSON format.
 
 <img width="469" height="656" alt="image" src="https://github.com/user-attachments/assets/7941f316-c797-4836-ab10-88912cf817f9" />
