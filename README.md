@@ -5,7 +5,7 @@
 
 This Go program sets up a simple HTTP server that responds with the client's public IP address in JSON format.
 
-<img width="469" height="656" alt="image" src="https://github.com/user-attachments/assets/7941f316-c797-4836-ab10-88912cf817f9" />
+<img width="969" height="1401" alt="screenshot-2026-10-03_17-05-14" src="https://github.com/user-attachments/assets/06f38f4e-d1b6-423b-956d-58675a6a6f2a" />
 
 
 ### Dependencies
